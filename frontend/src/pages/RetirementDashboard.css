@@ -1,0 +1,109 @@
+/* ── Hero Banner ───────────────────────────────────────────── */
+.rd-hero {
+  background: linear-gradient(135deg, #1a2560 0%, #2d3f99 50%, #1e3a5f 100%);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 12px 40px rgba(26,37,96,0.32);
+}
+
+.rd-hero-bg {
+  position: absolute;
+  top: -60px; right: -40px;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+  pointer-events: none;
+}
+
+.rd-hero-bg::after {
+  content: '';
+  position: absolute;
+  bottom: -120px; left: -60px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.03);
+}
+
+.rd-hero-content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+/* ── Stats ─────────────────────────────────────────────────── */
+.rd-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 0;
+}
+
+.rd-stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.rd-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+/* ── Tab content ───────────────────────────────────────────── */
+.rd-tab-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Account card ──────────────────────────────────────────── */
+.rd-account-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.rd-account-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow);
+}
+
+/* ── Projection controls ───────────────────────────────────── */
+.rd-proj-controls {
+  position: sticky;
+  top: 24px;
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .rd-stats-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 900px) {
+  .rd-hero-content { flex-direction: column; }
+  .rd-proj-controls { position: static; }
+}
+
+@media (max-width: 700px) {
+  .rd-stats-grid { grid-template-columns: 1fr 1fr; }
+  .rd-hero { padding: 22px; }
+}
+
+@media (max-width: 500px) {
+  .rd-stats-grid { grid-template-columns: 1fr; }
+}

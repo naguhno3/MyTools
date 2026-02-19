@@ -1,0 +1,13 @@
+const r = require('express').Router();
+const c = require('../controllers/budgetController');
+r.get('/', c.getBudgets);
+r.post('/', c.createBudget);
+r.get('/month/:month/:year', c.getBudgetByMonth);
+r.get('/:id', c.getBudget);
+r.put('/:id', c.updateBudget);
+r.delete('/:id', c.deleteBudget);
+r.get('/:id/items', c.getBudgetItems);
+r.post('/:id/items', c.createBudgetItem);
+r.put('/:id/items/:itemId', c.updateBudgetItem);
+r.delete('/:id/items/:itemId', c.deleteBudgetItem);
+module.exports = r;

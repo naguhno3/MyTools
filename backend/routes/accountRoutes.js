@@ -1,0 +1,11 @@
+const r = require('express').Router();
+const c = require('../controllers/accountController');
+r.get('/', c.getAccounts);
+r.get('/retirement-portfolio-trend', c.getRetirementPortfolioTrend);
+r.get('/:id', c.getAccount);
+r.get('/:id/transactions', c.getAccountTransactions);
+r.get('/:id/retirement-summary', c.getRetirementSummary);
+r.post('/', c.createAccount);
+r.put('/:id', c.updateAccount);
+r.delete('/:id', c.deleteAccount);
+module.exports = r;

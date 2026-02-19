@@ -1,0 +1,92 @@
+/* ── Asset Class Selector Grid ─────────────────────────────── */
+.inv-asset-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+@media (max-width: 680px) {
+  .inv-asset-grid { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ── Stats Grid ────────────────────────────────────────────── */
+.inv-stats-grid {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr 1fr 1fr;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 1200px) { .inv-stats-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 800px) { .inv-stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 500px) { .inv-stats-grid { grid-template-columns: 1fr; } }
+
+/* ── Investment Card Grid ──────────────────────────────────── */
+.inv-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+/* ── Investment Card ───────────────────────────────────────── */
+.inv-card {
+  background: var(--surface);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+  position: relative;
+  overflow: hidden;
+}
+
+.inv-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--ac, #6366f1), color-mix(in srgb, var(--ac, #6366f1) 60%, transparent));
+}
+
+.inv-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+  border-color: var(--border2);
+}
+
+.inv-card--sold {
+  opacity: 0.75;
+  background: var(--surface2);
+}
+
+.inv-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+
+.inv-card-values {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 14px;
+  background: var(--surface2);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+}
+
+/* ── Charts layout ─────────────────────────────────────────── */
+.inv-charts-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+@media (max-width: 900px) {
+  .inv-charts-layout { grid-template-columns: 1fr; }
+  .inv-charts-layout .card[style*="span 2"] { grid-column: span 1 !important; }
+}

@@ -1,0 +1,180 @@
+/* ── Retirement Page Layout ──────────────────────────────── */
+.ret-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+
+.ret-sidebar {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 14px 12px;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 24px;
+}
+
+.ret-sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 8px 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 8px;
+}
+
+.ret-account-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  transition: all 0.15s;
+  margin-bottom: 3px;
+}
+
+.ret-account-item:hover {
+  background: var(--surface2);
+}
+
+.ret-account-item:hover .account-actions {
+  opacity: 1 !important;
+}
+
+.ret-account-item.active {
+  background: color-mix(in srgb, var(--acc-color, #4f46e5) 8%, transparent);
+  border-color: color-mix(in srgb, var(--acc-color, #4f46e5) 25%, transparent);
+}
+
+.ret-detail-wrap { min-width: 0; }
+
+.ret-detail { display: flex; flex-direction: column; gap: 0; }
+
+/* ── Hero ─────────────────────────────────────────────────── */
+.ret-hero {
+  border-radius: var(--radius-xl);
+  padding: 28px;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 18px;
+}
+
+.ret-hero::before {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 200px; height: 200px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.06);
+}
+
+.ret-hero::after {
+  content: '';
+  position: absolute;
+  bottom: -60px; left: 30%;
+  width: 260px; height: 260px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.04);
+}
+
+/* ── Stats row ────────────────────────────────────────────── */
+.ret-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 0;
+}
+
+.ret-stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px;
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── Portfolio Summary Bar ────────────────────────────────── */
+.ret-summary-bar {
+  background: linear-gradient(135deg, #1a2560 0%, #2d3f99 60%, #1e3a5f 100%);
+  border-radius: var(--radius-xl);
+  padding: 28px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  gap: 24px;
+  box-shadow: 0 8px 32px rgba(26,37,96,0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.ret-summary-bar::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: 10%;
+  width: 160px; height: 160px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+}
+
+.ret-summary-main { flex: 1; }
+
+.ret-summary-breakdown {
+  display: flex;
+  gap: 32px;
+  flex-shrink: 0;
+}
+
+/* ── Empty State ──────────────────────────────────────────── */
+.ret-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 60px 24px;
+}
+
+.ret-empty-icons {
+  font-size: 52px;
+  letter-spacing: -4px;
+}
+
+/* ── Hover card (empty state clickable cards) ─────────────── */
+.hover-card {
+  transition: all 0.18s !important;
+}
+.hover-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+/* ── Responsive ────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  .ret-layout {
+    grid-template-columns: 1fr;
+  }
+  .ret-sidebar {
+    position: static;
+  }
+  .ret-stats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .ret-summary-bar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .ret-summary-breakdown {
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+}
+
+@media (max-width: 580px) {
+  .ret-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
