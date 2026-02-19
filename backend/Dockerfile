@@ -1,7 +1,27 @@
-FROM node:20-alpine
-WORKDIR /app
+FROM node:latest
+
+# Working directory
+
+WORKDIR /usr/src/app
+
+# Copy JSON Package
+
 COPY package*.json ./
+
+#Install
+
+RUN npm install prettier -g
 RUN npm install
+
+#COPY files
+
 COPY . .
-EXPOSE 5000
-CMD ["node", "server.js"]
+
+#RUN
+#RUN npm run dev
+
+#Expose
+EXPOSE 5018
+
+#Run app
+CMD ["npm","run","dev"]

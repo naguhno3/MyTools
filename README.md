@@ -131,9 +131,15 @@ finflow/
 - **Budget tracking**: Budget spending is calculated live from actual transactions in that category/month
 - **Category seeding**: 23 default categories are created once on first server start
 
-# Docker (easiest)
+
+docker build backend -t mytoolsapi:1
+docker network create villa334docker
+docker network connect villa334docker mymongodb
+docker run --network villa334docker --name mytoolsapi -p 8080:8080/tcp -d mytoolsapi:1
+docker build frontend -t mytoolsfe:1
+docker run --network villa334docker --name mytoolsfe -p 5173:5173 -d mytoolsfe:1
+
 docker-compose up -d
-# → open http://localhost:3000
 
 # Manual
 cd backend && npm install && npm run dev   # :5000

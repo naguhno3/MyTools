@@ -1,40 +1,34 @@
-version: '3.8'
+version: '3.7'
+
 services:
-  mongodb:
-    image: mongo:7
-    container_name: finflow-mongo
+  mytoolsapi:
+    build: ./backend
     ports:
-      - "27017:27017"
+      - "5018:5018"
+    depends_on:
+      - mymongodb
+    networks:
+      - mytoolsnetwork
+  mymongodb:
+    image: mongo
     volumes:
       - mongo-data:/data/db
-
-  backend:
-    build: ./backend
-    container_name: finflow-backend
     ports:
-      - "5000:5000"
-    environment:
-      MONGO_URI: mongodb://mongodb:27017/finflow
-      PORT: 5000
-    depends_on:
-      - mongodb
-    volumes:
-      - ./backend:/app
-      - /app/node_modules
-
-  frontend:
+      - "27017:27017"
+    networks:
+      - mytoolsnetwork
+  mytoolsfe:
     build: ./frontend
-    container_name: finflow-frontend
+    depends_on:
+      - mytoolsapi
     ports:
       - "3000:3000"
-    environment:
-      REACT_APP_API_URL: http://localhost:5000/api
-      CHOKIDAR_USEPOLLING: "true"
-    depends_on:
-      - backend
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
+    networks:
+      - mytoolsnetwork
+
+networks:
+    mytoolsnetwork:
+        driver: bridge
 
 volumes:
   mongo-data:

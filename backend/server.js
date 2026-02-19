@@ -18,7 +18,7 @@ app.use('/api/loans', require('./routes/loanRoutes'));
 
 app.get('/api/health', (_, res) => res.json({ status: 'ok' }));
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/finflow';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/MyTools';
 mongoose.connect(MONGO_URI)
   .then(async () => {
     console.log('✅ MongoDB connected');
