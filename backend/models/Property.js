@@ -18,6 +18,7 @@ const documentSchema = new mongoose.Schema({
   expiryDate: { type: Date },
   notes: { type: String },
   isImportant: { type: Boolean, default: false },
+  linkedDocId: { type: mongoose.Schema.Types.ObjectId, ref: 'Document' }, // vault doc
 }, { timestamps: true });
 
 const tenantSchema = new mongoose.Schema({

@@ -73,3 +73,25 @@ export const getAmortization = (id) => API.get(`/loans/${id}/amortization`);
 export const calculateEmi = (d) => API.post('/loans/calculate-emi', d);
 export const addLoanPayment = (id, d) => API.post(`/loans/${id}/payments`, d);
 export const deleteLoanPayment = (id, pid) => API.delete(`/loans/${id}/payments/${pid}`);
+
+// ── Document Vault ──────────────────────────────────────────────────────────
+// Upload uses FormData (multipart), all others use JSON
+export const uploadDocument = (formData) =>
+  API.post('/documents/upload', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+export const listDocuments = (params) => API.get('/documents', { params });
+export const getDocumentMeta = (id) => API.get(`/documents/${id}`);
+export const updateDocumentMeta = (id, d) => API.put(`/documents/${id}`, d);
+export const deleteVaultDocument = (id) => API.delete(`/documents/${id}`);
+export const getDocumentStats = () => API.get('/documents/stats');
+export const addDocumentLink = (id, d) => API.post(`/documents/${id}/link`, d);
+export const removeDocumentLink = (id, d) => API.delete(`/documents/${id}/link`, { data: d });
+
+// Download returns a blob — caller handles save
+export const getDocumentDownloadUrl = (id) =>
+  `${process.env.REACT_APP_API_URL || 'http://localhost:5018/api'}/documents/${id}/download`;
+
+// Loan documents
+export const addLoanDoc = (id, d) => API.post(`/loans/${id}/documents`, d);
+export const deleteLoanDoc = (id, did) => API.delete(`/loans/${id}/documents/${did}`);

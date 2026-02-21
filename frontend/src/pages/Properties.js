@@ -3,10 +3,11 @@ import toast from 'react-hot-toast';
 import {
   getProperties, createProperty, updateProperty, deleteProperty,
   getPropertySummary, upsertTenant, removeTenant,
-  addContact, deleteContact, addDocument, deleteDocument,
+  addContact, deleteContact, addDocument, updateDocument, deleteDocument,
   addPropertyTx, deletePropertyTx
 } from '../utils/api';
 import { fmt, fmtDate } from '../utils/helpers';
+import { DocPicker, DocLink } from '../components/DocPicker';
 import './Properties.css';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -359,57 +360,113 @@ function ContactModal({ property, contact, onClose, onSave }) {
 
 // ─── Document Modal ───────────────────────────────────────────────────────────
 function DocumentModal({ property, onClose, onSave }) {
-  const [form, setForm] = useState({ name:'', type:'', fileName:'', issueDate:'', expiryDate:'', notes:'', isImportant:false });
+  const [form, setForm] = useState({ name:'', type:'', issueDate:'', expiryDate:'', notes:'', isImportant:false, linkedDocId:'', linkedDocName:'', linkedDocOriginal:'', linkedDocMime:'' });
   const [saving, setSaving] = useState(false);
+  const [showPicker, setShowPicker] = useState(false);
   const set = (k,v) => setForm(p=>({...p,[k]:v}));
+
+  const handleVaultPick = (doc) => {
+    set('linkedDocId', doc._id);
+    set('linkedDocName', doc.name);
+    set('linkedDocOriginal', doc.originalName);
+    set('linkedDocMime', doc.mimeType);
+    // auto-fill name if blank
+    if (!form.name) set('name', doc.name);
+    setShowPicker(false);
+    toast.success('Document linked from vault! 📎');
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault(); setSaving(true);
     try {
-      const r = await addDocument(property._id, form);
+      const payload = {
+        name: form.name, type: form.type,
+        issueDate: form.issueDate || undefined,
+        expiryDate: form.expiryDate || undefined,
+        notes: form.notes, isImportant: form.isImportant,
+        ...(form.linkedDocId && {
+          linkedDocId: form.linkedDocId,
+          fileName: form.linkedDocOriginal,
+        }),
+      };
+      const r = await addDocument(property._id, payload);
       onSave(r.data); toast.success('Document recorded!'); onClose();
     } catch(err) { toast.error('Failed'); }
     finally { setSaving(false); }
   };
 
   return (
-    <div className="modal-overlay" onClick={onClose}>
-      <div className="modal" onClick={e=>e.stopPropagation()}>
-        <div className="modal-header">
-          <div className="modal-title">Add Document Record</div>
-          <button className="modal-close" onClick={onClose}>×</button>
+    <>
+      <div className="modal-overlay" onClick={onClose}>
+        <div className="modal" onClick={e=>e.stopPropagation()} style={{ maxWidth: 520 }}>
+          <div className="modal-header">
+            <div className="modal-title">Add Document Record</div>
+            <button className="modal-close" onClick={onClose}>×</button>
+          </div>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group"><label className="form-label">Document Name *</label>
+              <input className="form-input" value={form.name} onChange={e=>set('name',e.target.value)} required placeholder="e.g. Sale Deed 2019" /></div>
+            <div className="form-row">
+              <div className="form-group"><label className="form-label">Document Type</label>
+                <select className="form-select" value={form.type} onChange={e=>set('type',e.target.value)}>
+                  <option value="">Select type...</option>
+                  {DOC_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
+                </select></div>
+              <div className="form-row" style={{ gridTemplateColumns:'1fr 1fr', gap:10 }}>
+                <div className="form-group">
+                  <label className="form-label">Issue Date</label>
+                  <input type="date" className="form-input" value={form.issueDate} onChange={e=>set('issueDate',e.target.value)} /></div>
+                <div className="form-group">
+                  <label className="form-label">Expiry Date</label>
+                  <input type="date" className="form-input" value={form.expiryDate} onChange={e=>set('expiryDate',e.target.value)} /></div>
+              </div>
+            </div>
+
+            {/* Vault file link section */}
+            <div className="form-group">
+              <label className="form-label">Attach File from Vault</label>
+              {form.linkedDocId ? (
+                <div style={{ display:'flex', flexDirection:'column', gap:8 }}>
+                  <DocLink
+                    docId={form.linkedDocId}
+                    docName={form.linkedDocName}
+                    originalName={form.linkedDocOriginal}
+                    mimeType={form.linkedDocMime}
+                    onUnlink={() => { set('linkedDocId',''); set('linkedDocName',''); set('linkedDocOriginal',''); set('linkedDocMime',''); }}
+                  />
+                  <button type="button" className="btn btn-ghost btn-sm" onClick={() => setShowPicker(true)}>Change file</button>
+                </div>
+              ) : (
+                <button type="button" className="btn btn-ghost" onClick={() => setShowPicker(true)}
+                  style={{ width:'100%', justifyContent:'center', borderStyle:'dashed', padding:'12px' }}>
+                  📂 Pick from Document Vault
+                </button>
+              )}
+              <div className="form-hint">Link an uploaded file so it can be downloaded directly from this record.</div>
+            </div>
+
+            <div className="form-group"><label className="form-label">Notes</label>
+              <textarea className="form-textarea" value={form.notes} onChange={e=>set('notes',e.target.value)} style={{ minHeight:56 }} placeholder="Physical location, any important notes..." /></div>
+            <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
+              <input type="checkbox" id="imp" checked={form.isImportant} onChange={e=>set('isImportant',e.target.checked)} style={{ width:16, height:16 }} />
+              <label htmlFor="imp" style={{ fontSize:13, color:'var(--text2)', cursor:'pointer' }}>⭐ Mark as important document</label>
+            </div>
+            <div className="modal-footer">
+              <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
+              <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? '...' : 'Save Document'}</button>
+            </div>
+          </form>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="form-group"><label className="form-label">Document Name *</label>
-            <input className="form-input" value={form.name} onChange={e=>set('name',e.target.value)} required placeholder="e.g. Sale Deed 2019" /></div>
-          <div className="form-row">
-            <div className="form-group"><label className="form-label">Document Type</label>
-              <select className="form-select" value={form.type} onChange={e=>set('type',e.target.value)}>
-                <option value="">Select type...</option>
-                {DOC_TYPES.map(t => <option key={t} value={t}>{t}</option>)}
-              </select></div>
-            <div className="form-group"><label className="form-label">File / Reference Name</label>
-              <input className="form-input" value={form.fileName} onChange={e=>set('fileName',e.target.value)} placeholder="File name or reference" /></div>
-          </div>
-          <div className="form-row">
-            <div className="form-group"><label className="form-label">Issue Date</label>
-              <input type="date" className="form-input" value={form.issueDate} onChange={e=>set('issueDate',e.target.value)} /></div>
-            <div className="form-group"><label className="form-label">Expiry Date</label>
-              <input type="date" className="form-input" value={form.expiryDate} onChange={e=>set('expiryDate',e.target.value)} /></div>
-          </div>
-          <div className="form-group"><label className="form-label">Notes / Location</label>
-            <textarea className="form-textarea" value={form.notes} onChange={e=>set('notes',e.target.value)} style={{ minHeight:60 }} placeholder="Where is this document stored? Any important notes..." /></div>
-          <div style={{ display:'flex', alignItems:'center', gap:10, marginBottom:16 }}>
-            <input type="checkbox" id="imp" checked={form.isImportant} onChange={e=>set('isImportant',e.target.checked)} style={{ width:16, height:16 }} />
-            <label htmlFor="imp" style={{ fontSize:13, color:'var(--text2)', cursor:'pointer' }}>⭐ Mark as important document</label>
-          </div>
-          <div className="modal-footer">
-            <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
-            <button type="submit" className="btn btn-primary" disabled={saving}>{saving ? '...' : 'Save Document'}</button>
-          </div>
-        </form>
       </div>
-    </div>
+      {showPicker && (
+        <DocPicker
+          defaultCategory="property"
+          title="Pick a Property Document"
+          onSelect={handleVaultPick}
+          onClose={() => setShowPicker(false)}
+        />
+      )}
+    </>
   );
 }
 
@@ -772,27 +829,37 @@ function PropertyDetail({ property: initProp, onUpdate }) {
             <div className="prop-docs-grid">
               {[...prop.documents].sort((a,b)=>(b.isImportant?1:0)-(a.isImportant?1:0)).map(d => {
                 const isExpiring = d.expiryDate && new Date(d.expiryDate) < new Date(Date.now()+90*24*60*60*1000);
+                const isExpired = d.expiryDate && new Date(d.expiryDate) < new Date();
                 return (
                   <div key={d._id} className={`prop-doc-card ${d.isImportant?'prop-doc-important':''}`}>
-                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start' }}>
+                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'flex-start', marginBottom:8 }}>
                       <div style={{ display:'flex', gap:10, alignItems:'flex-start', flex:1, minWidth:0 }}>
-                        <div style={{ fontSize:28, flexShrink:0 }}>📄</div>
+                        <div style={{ fontSize:28, flexShrink:0 }}>{d.linkedDocId ? '📎' : '📄'}</div>
                         <div style={{ flex:1, minWidth:0 }}>
                           <div style={{ fontWeight:700, fontSize:13, color:'var(--text)', display:'flex', alignItems:'center', gap:6, flexWrap:'wrap' }}>
                             {d.name}
                             {d.isImportant && <span style={{ fontSize:9, fontWeight:800, padding:'2px 5px', borderRadius:4, background:'rgba(217,119,6,0.15)', color:'#d97706', textTransform:'uppercase' }}>⭐ Important</span>}
+                            {isExpired && <span style={{ fontSize:9, fontWeight:800, padding:'2px 5px', borderRadius:4, background:'rgba(220,38,38,0.12)', color:'var(--red)', textTransform:'uppercase' }}>Expired</span>}
                           </div>
                           {d.type && <div style={{ fontSize:11, color:'var(--text3)', marginTop:2 }}>{d.type}</div>}
-                          {d.fileName && <div style={{ fontSize:11, color:'var(--text3)' }}>📎 {d.fileName}</div>}
                         </div>
                       </div>
                       <button className="btn btn-danger btn-sm btn-icon" style={{ flexShrink:0 }} onClick={()=>handleDeleteDoc(d._id)}>×</button>
                     </div>
-                    <div style={{ display:'flex', gap:16, marginTop:10, flexWrap:'wrap' }}>
-                      {d.issueDate && <span style={{ fontSize:11, color:'var(--text3)' }}>Issued: {fmtDate(d.issueDate)}</span>}
-                      {d.expiryDate && <span style={{ fontSize:11, fontWeight:600, color:isExpiring?'var(--red)':'var(--text3)' }}>Expires: {fmtDate(d.expiryDate)}{isExpiring?' ⚠️':''}</span>}
+                    {d.linkedDocId && (
+                      <div style={{ marginBottom:8 }}>
+                        <DocLink docId={d.linkedDocId} docName={d.name} originalName={d.fileName} />
+                      </div>
+                    )}
+                    <div style={{ display:'flex', gap:14, flexWrap:'wrap' }}>
+                      {d.issueDate && <span style={{ fontSize:11, color:'var(--text3)' }}>📅 {fmtDate(d.issueDate)}</span>}
+                      {d.expiryDate && (
+                        <span style={{ fontSize:11, fontWeight:600, color:isExpired?'var(--red)':isExpiring?'var(--amber)':'var(--text3)' }}>
+                          ⏰ Expires {fmtDate(d.expiryDate)}{isExpiring&&!isExpired?' ⚠️':''}
+                        </span>
+                      )}
                     </div>
-                    {d.notes && <div style={{ fontSize:11, color:'var(--text2)', marginTop:8, padding:'8px 10px', background:'var(--surface2)', borderRadius:8 }}>{d.notes}</div>}
+                    {d.notes && <div style={{ fontSize:11, color:'var(--text2)', marginTop:8, padding:'8px 10px', background:'var(--surface2)', borderRadius:8, lineHeight:1.4 }}>{d.notes}</div>}
                   </div>
                 );
               })}
@@ -801,7 +868,7 @@ function PropertyDetail({ property: initProp, onUpdate }) {
             <div className="empty-state" style={{ padding:'40px 0' }}>
               <div className="empty-icon">📄</div>
               <div className="empty-title">No Documents Recorded</div>
-              <div className="empty-desc">Track sale deeds, khata, property tax receipts, insurance policies and more.</div>
+              <div className="empty-desc">Track sale deeds, khata, property tax receipts, insurance policies. Link files from your Document Vault for direct download.</div>
             </div>
           )}
         </div>

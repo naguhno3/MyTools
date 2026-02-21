@@ -301,3 +301,24 @@ exports.getLoanSummary = async (req, res) => {
     });
   } catch (err) { res.status(500).json({ error: err.message }); }
 };
+
+// ── Loan Documents ─────────────────────────────────────────────────────────
+exports.addLoanDocument = async (req, res) => {
+  try {
+    const loan = await Loan.findById(req.params.id);
+    if (!loan) return res.status(404).json({ error: 'Not found' });
+    loan.documents.push(req.body);
+    await loan.save();
+    res.json(loan);
+  } catch (err) { res.status(400).json({ error: err.message }); }
+};
+
+exports.deleteLoanDocument = async (req, res) => {
+  try {
+    const loan = await Loan.findById(req.params.id);
+    if (!loan) return res.status(404).json({ error: 'Not found' });
+    loan.documents.pull(req.params.docId);
+    await loan.save();
+    res.json(loan);
+  } catch (err) { res.status(500).json({ error: err.message }); }
+};

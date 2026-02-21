@@ -6,9 +6,11 @@ import {
 } from 'recharts';
 import {
   getLoans, createLoan, updateLoan, deleteLoan, getLoanSummary,
-  getAmortization, addLoanPayment, deleteLoanPayment
+  getAmortization, addLoanPayment, deleteLoanPayment,
+  addLoanDoc, deleteLoanDoc
 } from '../utils/api';
 import { fmt, fmtDate } from '../utils/helpers';
+import { DocPicker, DocLink } from '../components/DocPicker';
 import './Loans.css';
 
 // ─── Config ───────────────────────────────────────────────────────────────────
@@ -368,6 +370,7 @@ function LoanDetail({ loan: initLoan, onUpdate }) {
   const [amortLoading, setAmortLoading] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [showDocPicker, setShowDocPicker] = useState(false);
   const [amortPage, setAmortPage] = useState(0);
   const AMORT_PAGE_SIZE = 24;
 
@@ -424,6 +427,30 @@ function LoanDetail({ loan: initLoan, onUpdate }) {
     try {
       const r = await deleteLoanPayment(loan._id, pid);
       handleSave(r.data); toast.success('Payment deleted');
+    } catch { toast.error('Failed'); }
+  };
+
+  // Link / unlink vault document to loan
+  const handleLinkDoc = async (vaultDoc) => {
+    try {
+      const r = await addLoanDoc(loan._id, {
+        name: vaultDoc.name,
+        docType: vaultDoc.category,
+        linkedDocId: vaultDoc._id,
+        notes: '',
+      });
+      handleSave(r.data);
+      toast.success('Document linked! 🔗');
+      setShowDocPicker(false);
+    } catch { toast.error('Failed to link document'); }
+  };
+
+  const handleUnlinkDoc = async (docSubId) => {
+    if (!window.confirm('Remove this document link?')) return;
+    try {
+      const r = await deleteLoanDoc(loan._id, docSubId);
+      handleSave(r.data);
+      toast.success('Document unlinked');
     } catch { toast.error('Failed'); }
   };
 
@@ -528,7 +555,7 @@ function LoanDetail({ loan: initLoan, onUpdate }) {
 
       {/* ── Tabs ── */}
       <div className="tabs" style={{ marginTop: 22, overflowX: 'auto', whiteSpace: 'nowrap' }}>
-        {[['overview', '📊 Overview'], ['payments', `💳 Payments (${(loan.payments || []).length})`], ['amortization', '📋 Schedule'], ['charts', '📈 Charts']].map(([t, label]) => (
+        {[['overview', '📊 Overview'], ['payments', `💳 Payments (${(loan.payments || []).length})`], ['amortization', '📋 Schedule'], ['charts', '📈 Charts'], ['documents', `📎 Documents (${(loan.documents || []).length})`]].map(([t, label]) => (
           <button key={t} className={`tab ${tab === t ? 'active' : ''}`} onClick={() => setTab(t)}>{label}</button>
         ))}
       </div>
@@ -809,9 +836,86 @@ function LoanDetail({ loan: initLoan, onUpdate }) {
         </div>
       )}
 
+
+      {/* ── Documents Tab ── */}
+      {tab === 'documents' && (
+        <div style={{ marginTop: 4 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 18 }}>
+            <div>
+              <div className="section-title" style={{ marginBottom: 2 }}>Linked Documents ({(loan.documents || []).length})</div>
+              <div style={{ fontSize: 12, color: 'var(--text3)' }}>Loan agreements, sanction letters, NOC, statements — link any vault document here.</div>
+            </div>
+            <button className="btn btn-primary btn-sm" onClick={() => setShowDocPicker(true)} style={{ background: 'linear-gradient(135deg,#3b56f5,#7c3aed)', border: 'none' }}>
+              🔗 Link Document
+            </button>
+          </div>
+
+          {(loan.documents || []).length === 0 ? (
+            <div className="empty-state" style={{ padding: '40px 0' }}>
+              <div className="empty-icon">📎</div>
+              <div className="empty-title">No Documents Linked</div>
+              <div className="empty-desc">
+                Link documents from your vault — loan agreement, sanction letter, property valuation report, insurance, NOC, account statements and more.
+              </div>
+              <button className="btn btn-primary" onClick={() => setShowDocPicker(true)} style={{ background: 'linear-gradient(135deg,#3b56f5,#7c3aed)', border: 'none' }}>
+                🔗 Link First Document
+              </button>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              {loan.documents.map(d => (
+                <div key={d._id} style={{
+                  display: 'flex', alignItems: 'center', gap: 12,
+                  padding: '14px 16px', borderRadius: 12,
+                  border: '1.5px solid rgba(59,86,245,0.18)',
+                  background: 'rgba(59,86,245,0.04)',
+                  transition: 'all 0.15s',
+                }}>
+                  {/* Icon */}
+                  <div style={{ width: 44, height: 44, borderRadius: 12, background: `${lt.color}14`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>
+                    📎
+                  </div>
+                  {/* Info */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 700, fontSize: 14, color: 'var(--text)', marginBottom: 2 }}>{d.name}</div>
+                    <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', fontSize: 11, color: 'var(--text3)' }}>
+                      {d.docType && <span style={{ fontWeight: 700, color: lt.color, background: `${lt.color}12`, padding: '1px 7px', borderRadius: 100 }}>{d.docType}</span>}
+                      {d.notes && <span>📝 {d.notes}</span>}
+                    </div>
+                  </div>
+                  {/* Actions */}
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
+                    {d.linkedDocId && (
+                      <a
+                        href={getDocumentDownloadUrl(d.linkedDocId)}
+                        download
+                        onClick={(e) => { e.stopPropagation(); toast.success('Downloading...'); }}
+                        className="btn btn-primary btn-sm"
+                        style={{ background: `linear-gradient(135deg, ${lt.color}, ${lt.color}cc)`, border: 'none', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 5 }}
+                      >
+                        ⬇ Download
+                      </a>
+                    )}
+                    <button className="btn btn-danger btn-sm btn-icon" style={{ width: 30, height: 30 }} onClick={() => handleUnlinkDoc(d._id)}>×</button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Modals */}
       {showPaymentModal && <PaymentModal loan={loan} onClose={() => setShowPaymentModal(false)} onSave={handleSave} />}
       {showEditModal && <LoanModal loan={loan} onClose={() => setShowEditModal(false)} onSave={handleSave} />}
+      {showDocPicker && (
+        <DocPicker
+          onSelect={handleLinkDoc}
+          onClose={() => setShowDocPicker(false)}
+          defaultCategory="loan"
+          title="Link Document to Loan"
+        />
+      )}
     </div>
   );
 }

@@ -5,7 +5,8 @@ require('dotenv').config();
 
 const app = express();
 app.use(cors());
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ extended: true, limit: "50mb" }));
 
 app.use('/api/accounts', require('./routes/accountRoutes'));
 app.use('/api/transactions', require('./routes/transactionRoutes'));
@@ -15,16 +16,17 @@ app.use('/api/dashboard', require('./routes/dashboardRoutes'));
 app.use('/api/investments', require('./routes/investmentRoutes'));
 app.use('/api/properties', require('./routes/propertyRoutes'));
 app.use('/api/loans', require('./routes/loanRoutes'));
+app.use('/api/documents', require('./routes/documentRoutes'));
 
 app.get('/api/health', (_, res) => res.json({ status: 'ok' }));
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/MyTools';
+const MONGO_URI = process.env.MONGO_URI || 'mongodb://localhost:27017/finflow';
 mongoose.connect(MONGO_URI)
   .then(async () => {
     console.log('✅ MongoDB connected');
     const { seedCategories } = require('./controllers/categoryController');
     await seedCategories();
-    const PORT = process.env.PORT || 5018;
+    const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => console.log(`💰 MyTools API on port ${PORT}`));
   })
   .catch(err => { console.error(err.message); process.exit(1); });

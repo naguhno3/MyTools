@@ -61,6 +61,15 @@ const loanSchema = new mongoose.Schema({
   // Property linked (for home/LAP loans)
   propertyLinked: { type: mongoose.Schema.Types.ObjectId, ref: 'Property' },
 
+  // Linked vault documents
+  documents: [{
+    name: { type: String },
+    docType: { type: String },
+    linkedDocId: { type: mongoose.Schema.Types.ObjectId, ref: 'Document' },
+    notes: { type: String },
+    addedAt: { type: Date, default: Date.now },
+  }],
+
   // Status
   status: { type: String, enum: ['active', 'closed', 'npa'], default: 'active' },
   closedDate: { type: Date },

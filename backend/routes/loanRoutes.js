@@ -16,4 +16,8 @@ r.get('/:id/amortization', c.getAmortization);
 r.post('/:id/payments', c.addPayment);
 r.delete('/:id/payments/:paymentId', c.deletePayment);
 
+// Loan Documents
+r.post('/:id/documents', c.addLoanDocument);
+r.delete('/:id/documents/:docId', c.deleteLoanDocument);
+
 module.exports = r;

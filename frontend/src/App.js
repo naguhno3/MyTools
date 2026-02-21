@@ -12,6 +12,7 @@ import RetirementDashboard from './pages/RetirementDashboard';
 import Investments from './pages/Investments';
 import Properties from './pages/Properties';
 import Loans from './pages/Loans';
+import Documents from './pages/Documents';
 import { getExportData } from './utils/api';
 import { exportToExcel } from './utils/excelExport';
 import './App.css';
@@ -27,6 +28,10 @@ const NAV_MAIN = [
 const NAV_ASSETS = [
   { to: '/investments', icon: '📈', label: 'Investments' },
   { to: '/properties',  icon: '🏘️', label: 'Properties' },
+];
+
+const NAV_DOCVAULT = [
+  { to: '/documents', icon: '🗄️', label: 'Document Vault' },
 ];
 
 const NAV_LIABILITIES = [
@@ -96,6 +101,16 @@ function Sidebar() {
           </NavLink>
         ))}
 
+        <div className="nav-label">Vault</div>
+        {NAV_DOCVAULT.map(n => (
+          <NavLink key={n.to} to={n.to}
+            className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`}>
+            <span className="nav-icon">{n.icon}</span>
+            {n.label}
+            <span className="nav-dot" />
+          </NavLink>
+        ))}
+
         <div className="nav-label">Retirement</div>
         {NAV_RETIREMENT.map(n => (
           <NavLink key={n.to} to={n.to} end={n.end}
@@ -147,6 +162,7 @@ export default function App() {
             <Route path="/investments"           element={<Investments />} />
             <Route path="/properties"            element={<Properties />} />
             <Route path="/loans"                 element={<Loans />} />
+            <Route path="/documents"             element={<Documents />} />
             <Route path="/retirement"            element={<Retirement />} />
             <Route path="/retirement/dashboard"  element={<RetirementDashboard />} />
           </Routes>
