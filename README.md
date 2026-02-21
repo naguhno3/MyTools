@@ -52,7 +52,7 @@ A full-stack MERN application for comprehensive personal finance management. Tra
 ## 🏗 Tech Stack
 
 **Backend**: Node.js · Express · MongoDB · Mongoose  
-**Frontend**: React 18 · React Router v6 · Recharts · DM Sans + Syne + DM Mono fonts  
+**Frontend**: React 18 · React Router v6 · Recharts · DM Sans + DM Sans, sans-serif + DM Mono fonts  
 **Design**: Clean modern light theme · Deep navy sidebar · Blue accent system  
 
 ---

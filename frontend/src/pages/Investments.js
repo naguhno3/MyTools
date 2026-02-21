@@ -125,7 +125,7 @@ function InvestmentModal({ investment, onClose, onSave }) {
                   }}
                   onClick={() => { set('assetClass', key); set('color', conf.color); set('subType', ''); }}>
                   <div style={{ fontSize: 22, marginBottom: 3 }}>{conf.icon}</div>
-                  <div style={{ fontSize: 10, fontWeight: 800, color: form.assetClass === key ? conf.color : 'var(--text3)', fontFamily: 'Syne, sans-serif', lineHeight: 1.2 }}>{conf.label}</div>
+                  <div style={{ fontSize: 10, fontWeight: 800, color: form.assetClass === key ? conf.color : 'var(--text3)', fontFamily: 'DM Sans, sans-serif', lineHeight: 1.2 }}>{conf.label}</div>
                 </button>
               ))}
             </div>
@@ -426,7 +426,7 @@ function InvCard({ inv, onEdit, onUpdatePrice, onSell, onDelete }) {
             {ac?.icon}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
-            <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', fontFamily: 'Syne, sans-serif', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{inv.name}</div>
+            <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text)', fontFamily: 'DM Sans, sans-serif', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{inv.name}</div>
             <div style={{ fontSize: 11, color: 'var(--text3)', marginTop: 1, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
               <span style={{ color: ac?.color, fontWeight: 700 }}>{ac?.label}</span>
               {inv.subType && <span>· {inv.subType}</span>}

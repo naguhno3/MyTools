@@ -115,7 +115,7 @@ function LoanModal({ loan, onClose, onSave }) {
                 <button key={key} type="button" onClick={() => { set('loanType', key); set('color', t.color); }}
                   style={{ padding: '10px 6px', borderRadius: 10, border: `2px solid ${form.loanType === key ? t.color : 'var(--border)'}`, background: form.loanType === key ? `${t.color}12` : 'var(--surface2)', cursor: 'pointer', textAlign: 'center', transition: 'all 0.15s' }}>
                   <div style={{ fontSize: 20, marginBottom: 3 }}>{t.icon}</div>
-                  <div style={{ fontSize: 9, fontWeight: 800, color: form.loanType === key ? t.color : 'var(--text3)', fontFamily: 'Syne,sans-serif', lineHeight: 1.2 }}>{t.label}</div>
+                  <div style={{ fontSize: 9, fontWeight: 800, color: form.loanType === key ? t.color : 'var(--text3)', fontFamily: 'DM Sans, sans-serif', lineHeight: 1.2 }}>{t.label}</div>
                 </button>
               ))}
             </div>
@@ -452,7 +452,7 @@ function LoanDetail({ loan: initLoan, onUpdate }) {
             <div style={{ fontSize: 40, lineHeight: 1 }}>{lt.icon}</div>
             <div>
               <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.5)', marginBottom: 4 }}>{lt.label}</div>
-              <div style={{ fontFamily: 'Syne,sans-serif', fontSize: 22, fontWeight: 800, color: '#fff', lineHeight: 1.1 }}>{loan.name}</div>
+              <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 22, fontWeight: 800, color: '#fff', lineHeight: 1.1 }}>{loan.name}</div>
               <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', marginTop: 4 }}>🏦 {loan.lender}{loan.loanAccountNumber ? ` · A/c ${loan.loanAccountNumber}` : ''}</div>
             </div>
           </div>

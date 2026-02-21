@@ -25,6 +25,6 @@ mongoose.connect(MONGO_URI)
     const { seedCategories } = require('./controllers/categoryController');
     await seedCategories();
     const PORT = process.env.PORT || 5018;
-    app.listen(PORT, () => console.log(`💰 FinFlow API on port ${PORT}`));
+    app.listen(PORT, () => console.log(`💰 MyTools API on port ${PORT}`));
   })
   .catch(err => { console.error(err.message); process.exit(1); });

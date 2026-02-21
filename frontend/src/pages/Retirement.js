@@ -100,7 +100,7 @@ function AccountModal({ account, onClose, onSave }) {
                   style={{ padding: '14px 8px', borderRadius: 12, border: `2px solid ${form.type === key ? color : 'var(--border)'}`, background: form.type === key ? `${color}10` : 'var(--surface2)', cursor: 'pointer', transition: 'all 0.15s', textAlign: 'center' }}
                   onClick={() => onTypeChange(key)}>
                   <div style={{ fontSize: 26, marginBottom: 4 }}>{icon}</div>
-                  <div style={{ fontSize: 13, fontWeight: 800, color: form.type === key ? color : 'var(--text3)', fontFamily: 'Syne, sans-serif' }}>{label}</div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: form.type === key ? color : 'var(--text3)', fontFamily: 'DM Sans, sans-serif' }}>{label}</div>
                   <div style={{ fontSize: 10, color: 'var(--text3)', marginTop: 2 }}>{RETIREMENT_INFO[key]?.fullName}</div>
                 </button>
               ))}
@@ -353,7 +353,7 @@ function AccountDetail({ account, onRefresh }) {
               {info.fullName || tc.label}
               {account.bankName && ` · ${account.bankName}`}
             </div>
-            <div style={{ fontFamily: 'Syne, sans-serif', fontSize: 22, fontWeight: 800, color: '#fff' }}>{account.name}</div>
+            <div style={{ fontFamily: 'DM Sans, sans-serif', fontSize: 22, fontWeight: 800, color: '#fff' }}>{account.name}</div>
             {account.accountNumber && <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginTop: 2 }}>#{account.accountNumber}</div>}
           </div>
           <div style={{ fontSize: 32 }}>{account.icon || tc.icon}</div>
@@ -587,7 +587,7 @@ export default function Retirement() {
                 style={{ padding: '20px', background: `${color}08`, border: `1.5px solid ${color}22`, borderRadius: 14, cursor: 'pointer', transition: 'all 0.15s', textAlign: 'center' }}
                 className="hover-card">
                 <div style={{ fontSize: 30, marginBottom: 8 }}>{ACCOUNT_TYPES[type]?.icon}</div>
-                <div style={{ fontFamily: 'Syne, sans-serif', fontWeight: 800, fontSize: 14, color }}>{title}</div>
+                <div style={{ fontFamily: 'DM Sans, sans-serif', fontWeight: 800, fontSize: 14, color }}>{title}</div>
                 <div style={{ fontSize: 11, color: 'var(--text3)', marginTop: 4 }}>{desc}</div>
               </div>
             ))}

@@ -102,7 +102,7 @@ function PropertyModal({ property, onClose, onSave }) {
                 <button key={k} type="button" onClick={() => set('type', k)}
                   style={{ padding:'10px 8px', borderRadius:10, border:`2px solid ${form.type===k ? t.color : 'var(--border)'}`, background: form.type===k ? `${t.color}10` : 'var(--surface2)', cursor:'pointer', textAlign:'center', transition:'all 0.15s' }}>
                   <div style={{ fontSize:22, marginBottom:3 }}>{t.icon}</div>
-                  <div style={{ fontSize:10, fontWeight:800, color: form.type===k ? t.color : 'var(--text3)', fontFamily:'Syne,sans-serif' }}>{t.label}</div>
+                  <div style={{ fontSize:10, fontWeight:800, color: form.type===k ? t.color : 'var(--text3)', fontFamily:'DM Sans, sans-serif' }}>{t.label}</div>
                 </button>
               ))}
             </div>
@@ -529,7 +529,7 @@ function PropertyDetail({ property: initProp, onUpdate }) {
               <span style={{ fontSize:32 }}>{tc.icon}</span>
               <div>
                 <div style={{ fontSize:11, fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', color:'rgba(255,255,255,0.5)' }}>{tc.label}</div>
-                <div style={{ fontFamily:'Syne,sans-serif', fontSize:22, fontWeight:800, color:'#fff', lineHeight:1.1 }}>{prop.name}</div>
+                <div style={{ fontFamily:'DM Sans, sans-serif', fontSize:22, fontWeight:800, color:'#fff', lineHeight:1.1 }}>{prop.name}</div>
               </div>
             </div>
             {(prop.address||prop.city) && (
@@ -677,7 +677,7 @@ function PropertyDetail({ property: initProp, onUpdate }) {
                 <div style={{ display:'flex', gap:16, alignItems:'flex-start' }}>
                   <div style={{ width:56, height:56, borderRadius:16, background:'linear-gradient(135deg,#059669,#0d9488)', display:'flex', alignItems:'center', justifyContent:'center', fontSize:24, flexShrink:0 }}>👤</div>
                   <div style={{ flex:1 }}>
-                    <div style={{ fontFamily:'Syne,sans-serif', fontSize:20, fontWeight:800, color:'var(--text)' }}>{prop.tenant.name}</div>
+                    <div style={{ fontFamily:'DM Sans, sans-serif', fontSize:20, fontWeight:800, color:'var(--text)' }}>{prop.tenant.name}</div>
                     <div style={{ display:'flex', gap:16, marginTop:6, flexWrap:'wrap' }}>
                       {prop.tenant.phone && <a href={`tel:${prop.tenant.phone}`} style={{ fontSize:13, color:'var(--accent)', textDecoration:'none', fontWeight:600 }}>📞 {prop.tenant.phone}</a>}
                       {prop.tenant.email && <a href={`mailto:${prop.tenant.email}`} style={{ fontSize:13, color:'var(--accent)', textDecoration:'none', fontWeight:600 }}>✉️ {prop.tenant.email}</a>}

@@ -58,7 +58,7 @@ function buildSummarySheet(data) {
   const totalNetWorth = totalLiquid + totalRetirement + totalCurrentValue;
 
   const rows = [
-    ['FinFlow — Financial Summary', '', new Date().toLocaleDateString('en-IN', { dateStyle: 'long' })],
+    ['MyTools — Financial Summary', '', new Date().toLocaleDateString('en-IN', { dateStyle: 'long' })],
     [],
     ['NET WORTH BREAKDOWN', '', ''],
     ['Category', 'Amount (₹)', 'Notes'],

@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Syne:wght@600;700;800&family=DM+Mono:wght@400;500&display=swap');
+@import url('https://fonts.googleapis.com');
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -69,11 +70,11 @@ body {
   box-shadow: 0 4px 16px rgba(79,114,255,0.35);
 }
 .brand-name {
-  font-family: 'Syne', sans-serif;
-  font-size: 20px; font-weight: 800;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 25px; font-weight: 800;
   color: #fff; letter-spacing: -0.02em;
 }
-.brand-sub { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase; }
+.brand-sub { font-size: 14px; color: rgba(255,255,255,0.4); letter-spacing: 0.06em; text-transform: uppercase; }
 
 .sidebar-nav { flex: 1; padding: 16px 12px; display: flex; flex-direction: column; gap: 2px; }
 .nav-label { font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: rgba(255,255,255,0.3); padding: 14px 10px 6px; }
@@ -161,8 +162,8 @@ body {
 
 /* Typography */
 .page-title {
-  font-family: 'Syne', sans-serif;
-  font-size: 28px; font-weight: 800;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 35px; font-weight: 800;
   color: var(--text); letter-spacing: -0.03em;
 }
 .page-sub { font-size: 14px; color: var(--text2); margin-top: 3px; }
@@ -218,7 +219,7 @@ body {
 }
 .modal-lg { max-width: 680px; }
 .modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 24px; }
-.modal-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); }
+.modal-title { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 800; color: var(--text); }
 .modal-close { background: var(--bg2); border: none; color: var(--text3); cursor: pointer; font-size: 18px; width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
 .modal-close:hover { background: var(--border); color: var(--text); }
 .modal-footer { display: flex; justify-content: flex-end; gap: 10px; margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border); }
@@ -252,7 +253,7 @@ tbody tr:hover td { background: var(--surface2); }
 .divider { border: none; border-top: 1px solid var(--border); margin: 20px 0; }
 .empty-state { text-align: center; padding: 60px 24px; }
 .empty-icon { font-size: 48px; margin-bottom: 14px; }
-.empty-title { font-family: 'Syne', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
+.empty-title { font-family: 'DM Sans', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; color: var(--text); }
 .empty-desc { font-size: 13.5px; color: var(--text2); margin-bottom: 20px; max-width: 300px; margin-left: auto; margin-right: auto; }
 .spinner { width: 32px; height: 32px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.75s linear infinite; margin: 0 auto; }
 .loading-screen { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 300px; gap: 14px; color: var(--text2); font-size: 13px; }

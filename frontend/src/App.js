@@ -60,8 +60,8 @@ function Sidebar() {
       <div className="sidebar-brand">
         <div className="brand-mark">💸</div>
         <div>
-          <div className="brand-name">FinFlow</div>
-          <div className="brand-sub">Finance Tracker</div>
+          <div className="brand-name">NaguHNO3</div>
+          <div className="brand-sub">My Tools</div>
         </div>
       </div>
 
@@ -126,7 +126,7 @@ function Sidebar() {
           <span style={{ fontSize: 16 }}>{exporting ? '⏳' : '⬇'}</span>
           {exporting ? 'Exporting...' : 'Export to Excel'}
         </button>
-        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', marginTop: 8, textAlign: 'center' }}>FinFlow v1.3</div>
+        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.2)', marginTop: 8, textAlign: 'center' }}>MyTools v1.3</div>
       </div>
     </aside>
   );
